@@ -1,17 +1,11 @@
-import { connect } from "react-redux";
 import Post from "./Post.js";
+import { useSelector } from "react-redux";
 
-const PostsList = ( {posts} ) => {
-
+const PostsList = ( ) => {
+	const posts = useSelector(state => state.posts);
 	return (
 		(posts.map(((item, index) => <Post {...item} key={index}/>))).reverse()
 	)
 }
 
-function mapStateToProps(state) {
-	return { 
-		posts: state.posts
-		}
-}
-
-export default connect(mapStateToProps)(PostsList)
+export default PostsList;

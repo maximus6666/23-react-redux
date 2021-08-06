@@ -120,3 +120,7 @@
   height: 30px;
   
 }
+
+.heart, .reposts, .comments {
+  cursor:pointer;
+}

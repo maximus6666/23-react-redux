@@ -6,16 +6,24 @@ const date = new Date();
 const initialState = {
   posts: [
     {
+      postId:1,
       authorId: 1,
       content: "WTF? Who is Ray? Why she is Skywalker? Luke...?",
       image:"https://specials-images.forbesimg.com/imageserve/5e63b3c8e1e617000759130e/960x0.jpg?fit=scale",
       date: date.toLocaleString(),
+      likes: 128,
+      comments: 10,
+      reposts: 51,
     },
     {
+      postId:2,
       authorId: 2,
       content: "Hello there...",
       image: postImg,
       date: date.toLocaleString(),
+      likes: 256,
+      comments: 22,
+      reposts: 66,
     },
 
   ],
@@ -48,6 +56,18 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         posts: [...state.posts, action.payload]
+      }
+    case "ADD_LIKE":
+      const index = state.posts.findIndex((item) => item.postId === action.payload.postId);
+      return {
+        ...state,
+        posts: state.posts.map((item, i, arr) => {
+          arr[index].likes = action.payload.likes;
+          arr[index].comments = action.payload.comments;
+          arr[index].reposts = action.payload.reposts;
+
+          return item
+        })
       }
 
     default:return state;

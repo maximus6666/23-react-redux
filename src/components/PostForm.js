@@ -1,23 +1,35 @@
-import {React, useState} from 'react';
+import { React, useState } from 'react';
 import store from '../store';
-import {addPost} from "../redux/actions";
+import { addPost } from "../redux/actions";
 
 const PostForm = () => {
 	const [authorId, setAuthorId] = useState(1);
 	const [postContent, setPostContent] = useState("");
 	const [postImg, setPostImg] = useState("");
+	const [postId, setPostId] = useState(store.getState().posts.length + 1);
 
   const addPostHandle = () => {
-    store.dispatch(addPost(
-      {
-        authorId: authorId,
-        content: postContent,
-        image: postImg,
-        date: new Date().toLocaleString()
-      }
-    ));
-    setPostContent("");
-    setPostImg("");
+		if (!postContent || !postImg) {
+			console.log();
+			alert ('Please fill the form')
+		} else {
+			store.dispatch(addPost(
+				{
+					postId: postId,
+					authorId: authorId,
+					content: postContent,
+					image: postImg,
+					date: new Date().toLocaleString(),
+					likes: 0,
+					comments: 0,
+					reposts: 0,
+				}
+			));
+			setPostId(postId + 1);
+			setPostContent("");
+			setPostImg("");
+		}
+    
   }
 
 	return(

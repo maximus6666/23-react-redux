@@ -1,19 +1,56 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "../styles.css";
-import comments from "../icons/comment.svg";
+import commentsImg from "../icons/comment.svg";
 import heart from "../icons/heart.svg";
-import reposts from "../icons/repost.svg";
+import repostsImg from "../icons/repost.svg";
 import share from "../icons/share.svg";
 import verifyed from "../icons/verified.svg";
 import chevron from "../icons/down-chevron.svg";
-import store from '../store'
+import store from '../store';
+import { addLike } from '../redux/actions';
 
 const Post = ( props ) => {
-
   const state = store.getState();
-  const {authorId, date, content, image } = props;
+  const {authorId, date, content, image, likes, comments, reposts, postId } = props;
   const author = state.authors.find(item => item.id === parseInt(authorId));
+
+  const [isLiked, setIsLiked] = useState(false);
+  const [isCommented, setIsCommented] = useState(false);
+  const [isReposted, setIsReposted] = useState(false);
+
+  const likeHandle = () => {
+    const currentPost = state.posts.find((item) => item.postId === parseInt(postId));
+    store.dispatch(addLike(
+      {
+        ...currentPost,
+        likes: isLiked ? likes - 1 : likes + 1,
+      }
+    ));
+    setIsLiked(!isLiked)
+  }
   
+  const commentsHandle = () => {
+    const currentPost = state.posts.find((item) => item.postId === parseInt(postId));
+    store.dispatch(addLike(
+      {
+        ...currentPost,
+        comments: isCommented ? comments - 1 : comments + 1,
+      }
+    ));
+    setIsCommented(!isCommented)
+  }
+
+  const repostsHandle = () => {
+    const currentPost = state.posts.find((item) => item.postId === parseInt(postId));
+    store.dispatch(addLike(
+      {
+        ...currentPost,
+        reposts: isReposted ? reposts - 1 : reposts + 1,
+      }
+    ));
+    setIsReposted(!isReposted)
+  }
+
 	return (
     <div className="post">
       <div className="author-panel">
@@ -34,17 +71,23 @@ const Post = ( props ) => {
       <div className="post-img-block">
         <img className="post-img" src={image} alt="post-img"/>
         <div className="icons-block">
-          <div className="comments">
-            <img src={comments} alt="coments"/>
-            <span>482</span>
+          <div >
+            <div onClick={commentsHandle} className="comments">
+              <img src={commentsImg} alt="coments"/>
+              <span>{comments}</span>
+            </div>
           </div>
-          <div className="reposts">
-            <img src={reposts} alt="reposts"/>
-            <span>125</span>
+          <div >
+            <div onClick={repostsHandle} className="reposts">
+              <img src={repostsImg} alt="reposts"/>
+              <span>{reposts}</span>
+            </div>
           </div>				
-          <div className="heart">
-            <img src={heart} alt="heart"/>
-            <span>345</span>
+          <div  >
+            <div onClick={likeHandle} className="heart">
+              <img src={heart} alt="heart"/>
+              <span>{likes}</span>
+            </div>
           </div>			
           <div className="share">
             <img src={share} alt="share"/>
